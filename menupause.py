@@ -1,5 +1,5 @@
 
-import sys,os,keyboard,time
+import sys,os,keyboard,time,pyautogui
 
 # Kurzor elrejtése
 sys.stdout.write("\033[?25l")
@@ -20,7 +20,7 @@ def kepfrisites(menu_items,jelenlegipont):
 def menu():
     fut=True
     menu_items = ["Start", "Beállítások", "Kilépés"]
-    jelenlegipont=0
+    jelenlegipont=-1
     kepfrisites(menu_items,jelenlegipont)
     # while fut:
     #     for event in pygame.event.get(): 
@@ -38,6 +38,8 @@ def menu():
     #                         pygame.quit()
     #                         sys.exit()
     while fut:
+        if keyboard.is_pressed('up') and jelenlegipont==-1:
+             jelenlegipont=3
         if keyboard.is_pressed('up') and jelenlegipont > 0:
             jelenlegipont -= 1
             kepfrisites(menu_items, jelenlegipont)
@@ -47,8 +49,27 @@ def menu():
             kepfrisites(menu_items, jelenlegipont)
 
         if keyboard.is_pressed('enter'):
-            if jelenlegipont == 2:
+
+            if jelenlegipont == 2 and menu_items[2]=="Vissza":
+                menu_items = ["Start", "Beállítások", "Kilépés"]
+                jelenlegipont=-1
+                kepfrisites(menu_items, jelenlegipont)
+                time.sleep(0.1) 
+
+            elif jelenlegipont == 2:
                 print("Kilépés...")
                 sys.exit()
+
+            if jelenlegipont == 1 and menu_items[1]=="Beállítások":
+                jelenlegipont=-1
+                menu_items = ["Valami", "Fullscreen", "Vissza"]
+                kepfrisites(menu_items, jelenlegipont)
+
+            if jelenlegipont == 1 and menu_items[1]=="Fullscreen":
+                pyautogui.press('f11')
+                kepfrisites(menu_items, jelenlegipont)
+                 
+           
+                 
 
         time.sleep(0.1) 
